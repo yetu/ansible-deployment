@@ -1,0 +1,20 @@
+--- 
+
+- name: config | Get current date 
+  shell: date +"%Y-%m-%d_%H_%M"
+  register: current_date
+
+- name: config | set new version directory
+  set_fact:
+    deployment_artifact_version_dir : "{{ deployment_work_dir }}/{{ current_date.stdout }}"
+
+- name : config | Create application base directories
+  file: 
+    path="{{ item }}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+    mode="0755"
+    state="directory"
+  with_items:
+    - "{{ deployment_work_dir }}"
+    - "{{ deployment_artifact_version_dir }}"

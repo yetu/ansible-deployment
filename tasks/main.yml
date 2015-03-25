@@ -1,0 +1,20 @@
+---
+
+- include: directories.yml
+  tags: ["deploy-directories"]
+
+- include: init-script.yml
+  when: deployment_install_initd
+  tags: ["deploy-initd"]
+
+- include: get-artifact.yml
+  tags: ["deploy-artifact"]
+
+- include: unpack.yml
+  tags: ["deploy-unpack"]
+
+
+
+
+
+

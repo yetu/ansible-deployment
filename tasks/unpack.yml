@@ -1,0 +1,39 @@
+--- 
+
+- name: "unpack | Unzip application (if .tgz)"
+  command: "tar -xf {{deployment_artifact_version_dir}}/{{deployment_artifact_destination_name}} -C {{deployment_artifact_version_dir}} --strip-components 1"
+  when: deployment_artifact_destination_name.find('.tgz') >= 1
+
+- name: "unpack | Unzip application (if .zip)"
+  command: "unzip  -o {{deployment_artifact_version_dir}}/{{deployment_artifact_destination_name}} -d {{deployment_artifact_version_dir}}"
+  when: deployment_artifact_destination_name.find('.zip') >= 1
+
+- name: "unpack | Unzip config files (if .jar) (Optional)"
+  command: "unzip {{deployment_artifact_version_dir}}/{{deployment_artifact_destination_name}} -d {{deployment_artifact_version_dir}} *.conf"
+  when: deployment_artifact_destination_name.find('.jar') >= 1
+  ignore_errors: yes
+
+- name: "unpack | Change file owner for all files"
+  file: 
+    path="{{deployment_artifact_version_dir}}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+    state="directory"
+    recurse="yes"
+
+- name: "unpack | Create latest symlink"
+  file: 
+    src="{{ deployment_artifact_version_dir }}"
+    dest="{{ deployment_current_dir }}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+    mode="0755"
+    state="link"
+  notify:
+   - restartApp
+
+- name: "unpack | check http service for non-service content (e.g. static files)"
+  debug: msg="placeholder task to notify http request check"
+  when: not deployment_install_initd
+  changed_when: true
+  notify: "make http request to service"

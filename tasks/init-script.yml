@@ -1,0 +1,27 @@
+---
+
+- name: "init-script | Create application init.d script"
+  initd:
+    name="{{ deployment_artifact_name }}"
+    path="{{ deployment_work_dir }}/{{ deployment_artifact_name }}.sh"
+    exec_cmd="{{ deployment_exec_cmd }}"
+    exec_args="{{ deployment_exec_arg }}"
+    run_user="{{ deployment_user }}"
+    run_group="{{ deployment_group }}"
+    base_dir="{{ deployment_work_dir }}"
+    grep_for="{{ deployment_grep_name }}"
+    timeout_start="{{ deployment_timeout_start_sec }}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_user }}"
+    mode=0755
+  tags: create_initscript
+
+- name: "init-script | Create symlink for init script"
+  file:
+    src="{{deployment_work_dir}}/{{deployment_artifact_name}}.sh"
+    dest="/etc/init.d/{{deployment_artifact_name}}"
+    owner="root"
+    group="root"
+    mode="0755"
+    state="link"
+  tags: link_initscript
