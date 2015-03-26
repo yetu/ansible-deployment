@@ -8,7 +8,7 @@
     exec_args="{{ deployment_exec_arg }}"
     run_user="{{ deployment_user }}"
     run_group="{{ deployment_group }}"
-    base_dir="{{ deployment_work_dir }}"
+    base_dir="{{ deployment_current_dir }}"
     grep_for="{{ deployment_grep_name }}"
     timeout_start="{{ deployment_timeout_start_sec }}"
     owner="{{ deployment_user }}"

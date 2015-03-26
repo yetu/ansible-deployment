@@ -32,7 +32,7 @@ WAIT_TILL_TIMEOUT="$wait_till_timeout"
 START_METHOD="$start_method"
 
 ## Play Specific stuff
-PLAY_PID_FILE=$BASE_DIR/current/RUNNING_PID
+PLAY_PID_FILE=$BASE_DIR/RUNNING_PID
 
 ## Flag Variables
 START_CODE=0
