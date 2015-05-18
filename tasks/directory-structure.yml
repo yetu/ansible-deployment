@@ -27,6 +27,14 @@
   notify:
    - restart app
 
+- name: directory structure | Create deployment date file
+  copy:
+    content=""
+    dest="{{ deployment_current_dir }}/{{ current_date.stdout }}.deployment.date"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+  when: download_artifact.changed
+
 - name: directory structure | check http service for non-service content (e.g. static files)
   debug:
     msg="placeholder task to notify http request check"
