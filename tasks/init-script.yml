@@ -1,6 +1,6 @@
 ---
 
-- name: "init-script | Create application init.d script"
+- name: init-script | Create application init.d script
   initd:
     name="{{ deployment_artifact_name }}"
     path="{{ deployment_work_dir }}/{{ deployment_artifact_name }}.sh"
@@ -16,10 +16,10 @@
     mode=0755
   tags: create_initscript
 
-- name: "init-script | Create symlink for init script"
+- name: init-script | Create symlink for init script
   file:
-    src="{{deployment_work_dir}}/{{deployment_artifact_name}}.sh"
-    dest="/etc/init.d/{{deployment_artifact_name}}"
+    src="{{ deployment_work_dir }}/{{ deployment_artifact_name }}.sh"
+    dest="/etc/init.d/{{ deployment_artifact_name }}"
     owner="root"
     group="root"
     mode="0755"

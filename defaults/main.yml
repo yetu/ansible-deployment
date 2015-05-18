@@ -25,7 +25,7 @@ deployment_grep_name                    : "{{ deployment_exec_cmd }}"
 # How long to probe for an active process upon service start / restart
 deployment_timeout_start_sec            : 5
 # Pause time to wait for application to bootstrap. Needed for e.g. apps including the new relic agent.
-deployment_bootstrap_wait_sec           : 0
+deployment_timeout_wait_sec             : 0
 
 # HTTP GET request to check that the server is up and running
 # the content of the result is then checked and compared with _expected_content
@@ -37,6 +37,11 @@ deployment_http_check_port              : "80"
 deployment_http_check_domain            : "{{ansible_default_ipv4.address}}"
 deployment_http_check_url               : "{{deployment_http_check_protocol}}{{deployment_http_check_domain}}:{{deployment_http_check_port}}{{deployment_http_check_url_suffix}}"
 
+# By default you deploy once and to override you must pass true to force
+deployment_force                        :  false
+deployment_guard_file                   :  "/var/local/deployment_first_boot_file"
+
+resolve                                 : "nexus"
 # nexus settings
 deployment_nexus_url_base               : ""
 deployment_nexus_url_resolver           : "{{ deployment_nexus_url_base }}/nexus/service/local/artifact/maven/resolve?r=releases&g={{ deployment_artifact_organization }}&a={{ deployment_artifact_name }}&e={{ deployment_artifact_extension }}&v={{ deployment_artifact_version }}"

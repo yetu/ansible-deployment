@@ -1,0 +1,41 @@
+--- 
+
+- name: download | Get current date
+  shell: date +"%Y-%m-%d_%H_%M"
+  changed_when: False
+  register: current_date
+
+- name: download | set new version directory
+  set_fact:
+    deployment_artifact_version_dir : "{{ deployment_work_dir }}/{{ nexus_artifact_info.json.data.version }}"
+    #deployment_artifact_version_dir : "{{ deployment_work_dir }}/{{ current_date.stdout }}"
+
+- name: download | Create application base directories
+  file: 
+    path="{{ item }}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+    mode="0755"
+    state="directory"
+  with_items:
+    - "{{ deployment_work_dir }}"
+    - "{{ deployment_artifact_version_dir }}"
+
+- name: download | nexus | download artifact
+  get_url:
+    url="{{ deployment_nexus_url_download }}"
+    dest="{{ deployment_artifact_version_dir }}/{{ deployment_artifact_destination_name }}"
+  register: download_artifact
+
+- name: download | Unzip application (if .tgz)
+  command: "tar -xf {{deployment_artifact_version_dir}}/{{deployment_artifact_destination_name}} -C {{deployment_artifact_version_dir}} --strip-components 1"
+  when: deployment_artifact_destination_name.find('.tgz') >= 1 and download_artifact.changed
+
+- name: download | Unzip application (if .zip)
+  command: "unzip  -o {{deployment_artifact_version_dir}}/{{deployment_artifact_destination_name}} -d {{deployment_artifact_version_dir}}"
+  when: deployment_artifact_destination_name.find('.zip') >= 1 and download_artifact.changed
+
+- name: download | Unzip config files (if .jar) (Optional)
+  command: "unzip {{deployment_artifact_version_dir}}/{{deployment_artifact_destination_name}} -d {{deployment_artifact_version_dir}} *.conf"
+  when: deployment_artifact_destination_name.find('.jar') >= 1 and download_artifact.changed
+  ignore_errors: yes
