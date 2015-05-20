@@ -14,6 +14,8 @@
     owner="{{ deployment_user }}"
     group="{{ deployment_user }}"
     mode=0755
+  notify:
+    - restart app
   tags: create_initscript
 
 - name: init-script | Create symlink for init script
@@ -24,4 +26,6 @@
     group="root"
     mode="0755"
     state="link"
+  notify:
+    - restart app
   tags: link_initscript
