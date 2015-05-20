@@ -17,7 +17,7 @@
   tags: ["initd"]
 
 - include: directory-structure.yml
-  when: not deployment_guard_file.stat.exists or deployment_force
+  when: not reg_guard_file.stat.exists or deployment_force
   tags: ["directory", "directory-structure"]
 
 - name: main | Touch file guard
