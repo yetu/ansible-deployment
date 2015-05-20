@@ -1,0 +1,41 @@
+[program:{{ deployment_supervisor_name | mandatory }}]
+
+# Command to run and arguments
+command={{ deployment_supervisor_command | mandatory }}
+
+#Number of process to spawn
+process_name={{ deployment_supervisor_process_name | default(deployment_supervisor_command) }}
+numprocs={{ deployment_supervisor_numprocs | default("1") }}
+#numprocs_start
+
+# Starting/restart/stop
+autostart={{ deployment_supervisor_autostart | default("true") }}
+# process will be restart when the program exits with not exist codes
+autorestart={{ deployment_supervisor_autostart | default("false") }}
+# total number of seconds which the program needs to stay running after a startup to consider the start successful.
+startsecs={{ deployment_supervisor_startsecs | default("0") }}
+startretries={{ deployment_supervisor_startretries | default("3") }}
+stopsignal={{ deployment_supervisor_stopsignal | default("TERM") }}
+stopwaitsecs={{ deployment_supervisor_stopwaitsecs | default("10") }}
+# The list of “expected” exit codes for this program
+exitcodes={{ deployment_supervisor_exitcodes | default("0,2") }}
+
+# User to run a process as
+user={{ deployment_supervisor_user | mandatory }}
+
+# Log
+redirect_stderr={{ deployment_supervisor_redirect_stderr | default("true") }}
+stdout_logfile={{ deployment_supervisor_log | default("/dev/null") }}
+stdout_logfile_maxbytes={{ deployment_supervisor_max_log_size | default("50MB") }}
+stdout_logfile_backups={{ deployment_supervisor_log_backups | default("0") }}
+
+#Enviornment
+{% if deployment_supervisor_env_vars is defined and deployment_supervisor_env_vars | length > 0 %}
+environment={% for name, var in deployment_supervisor_env_vars.iteritems() %}{{ name|upper }}="{{ var }}"{% if not loop.last %},{% endif%}{% endfor %}
+{% endif %}
+
+#Directory to change to
+{% if deployment_supervisor_directory is defined %}directory={{ deployment_supervisor_directory  }}{% endif %}
+
+#UMASK
+{% if deployment_supervisor_umask is defined %}umask={{ deployment_supervisor_umask }}{% endif %}

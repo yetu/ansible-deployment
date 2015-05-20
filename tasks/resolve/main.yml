@@ -1,4 +1,0 @@
----
-
-- include: nexus.yml
-  when: resolve == "nexus"

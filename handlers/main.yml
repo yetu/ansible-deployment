@@ -1,12 +1,30 @@
 ---
+
 - name: restart app
+  debug:
+    msg="Restart app"
+  changed_when: true
+  notify:
+     - restart app initd
+     - restart app supervisor
+
+- name: restart app initd
   service: 
     name="{{ deployment_artifact_name }}"
     state="restarted"
     enabled="yes"
   changed_when: true
   notify: wait 4 port
-  when: deployment_install_initd
+  when: deployment_install_daemon == "initd"
+
+- name: restart app supervisor
+  service:
+    name="{{ deployment_artifact_name }}"
+    state="restarted"
+    enabled="yes"
+  changed_when: true
+  notify: wait 4 port
+  when: deployment_install_daemon == "supervisor"
 
 - name: wait 4 port
   wait_for:

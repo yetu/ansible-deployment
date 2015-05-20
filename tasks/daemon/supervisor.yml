@@ -1,0 +1,8 @@
+---
+
+- name: daemon | supervisor | Create Service file
+  template:
+    src="../../templates/supervisor.j2"
+    dest="/etc/supervisor/conf.d/{{ deployment_supervisor_name }}.ini.conf"
+    owner=root
+    mode=0600

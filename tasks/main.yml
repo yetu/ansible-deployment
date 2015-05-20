@@ -5,15 +5,15 @@
     path="{{ deployment_guard_file }}"
   register: guard_file
 
-- include: resolve/main.yml
+- include: resolver/main.yml
   when: not guard_file.stat.exists or deployment_force
 
 - include: download.yml
   when: not guard_file.stat.exists or deployment_force
   tags: ["donwload"]
 
-- include: init-script.yml
-  when: deployment_install_initd and not guard_file.stat.exists or deployment_force
+- include: daemon/main.yml
+  when: not guard_file.stat.exists or deployment_force
   tags: ["initd"]
 
 - include: directory-structure.yml

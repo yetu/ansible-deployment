@@ -1,0 +1,9 @@
+---
+
+- include: init-script.yml
+  when: deployment_install_daemon == "initd"
+  tags: ["initd"]
+
+- include: supervisor.yml
+  when: deployment_install_daemon == "supervisor"
+  tags: ["supervisor"]
