@@ -3,21 +3,21 @@
 - name: main | Check if first boot file exists
   stat:
     path="{{ deployment_guard_file }}"
-  register: guard_file
+  register: reg_guard_file
 
 - include: resolver/main.yml
-  when: not guard_file.stat.exists or deployment_force
+  when: not reg_guard_file.stat.exists or deployment_force
 
 - include: download.yml
-  when: not guard_file.stat.exists or deployment_force
+  when: not reg_guard_file.stat.exists or deployment_force
   tags: ["donwload"]
 
 - include: daemon/main.yml
-  when: not guard_file.stat.exists or deployment_force
+  when: not reg_guard_file.stat.exists or deployment_force
   tags: ["initd"]
 
 - include: directory-structure.yml
-  when: not guard_file.stat.exists or deployment_force
+  when: not deployment_guard_file.stat.exists or deployment_force
   tags: ["directory", "directory-structure"]
 
 - name: main | Touch file guard
