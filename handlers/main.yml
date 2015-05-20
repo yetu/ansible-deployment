@@ -9,7 +9,7 @@
      - restart app supervisor
 
 - name: restart app initd
-  service: 
+  service:
     name="{{ deployment_artifact_name }}"
     state="restarted"
     enabled="yes"
@@ -18,10 +18,9 @@
   when: deployment_install_daemon == "initd"
 
 - name: restart app supervisor
-  service:
+  supervisorctl:
     name="{{ deployment_artifact_name }}"
     state="restarted"
-    enabled="yes"
   changed_when: true
   notify: wait 4 port
   when: deployment_install_daemon == "supervisor"

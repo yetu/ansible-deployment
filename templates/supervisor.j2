@@ -4,7 +4,7 @@
 command={{ deployment_supervisor_command | mandatory }}
 
 #Number of process to spawn
-process_name={{ deployment_supervisor_process_name | default(deployment_supervisor_command) }}
+process_name={{ deployment_supervisor_process_name | default(deployment_supervisor_name) }}
 numprocs={{ deployment_supervisor_numprocs | default("1") }}
 #numprocs_start
 
