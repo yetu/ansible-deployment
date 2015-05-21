@@ -29,8 +29,8 @@
   wait_for:
     port="{{ deployment_http_check_port }}"
     host="{{ ansible_ssh_host | default(inventory_hostname) }}"
-    delay=10
-    timeout="{{ deployment_bootstrap_wait_sec }}"
+    delay="{{ deployment_delay_sec }}"
+    timeout="{{ deployment_timeout_wait_sec }}"
   changed_when: true
   notify: HTTP request
 

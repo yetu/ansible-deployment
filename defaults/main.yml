@@ -20,10 +20,10 @@ deployment_artifact_extension           : "tgz"
 deployment_artifact_destination_name    : "{{ deployment_artifact_name }}.{{ deployment_artifact_extension }}"
 
 
-# How long to probe for an active process upon service start / restart
-deployment_timeout_start_sec            : 5
-# Pause time to wait for application to bootstrap. Needed for e.g. apps including the new relic agent.
-deployment_timeout_wait_sec             : 0
+# How long to wait before starting to probe for service
+deployment_delay_sec                    : 5
+# How long to wait before failing if an application is not up
+deployment_timeout_wait_sec             : 45
 
 # HTTP GET request to check that the server is up and running
 # the content of the result is then checked and compared with _expected_content
