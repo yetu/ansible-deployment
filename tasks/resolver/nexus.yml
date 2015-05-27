@@ -17,4 +17,3 @@
   debug:
     var=nexus_artifact_info.json.data
   tags: ["artifact-info"]
-#    var=nexus_artifact_info.json.data.
