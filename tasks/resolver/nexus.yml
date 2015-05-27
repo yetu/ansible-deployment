@@ -1,0 +1,19 @@
+---
+
+- name: resolve | nexus | Make the http request to find the latest version on nexus
+  uri:
+    url="{{ deployment_nexus_url_resolver }}"
+    method=GET
+    HEADER_Accept="application/json"
+    HEADER_Authorization="{{ nexus_credentials | default(omit) }}"
+  register: nexus_artifact_info
+  tags: ["artifact-info"]
+
+- name: resolve | nexus | Show nexus url
+  debug:
+    var=deployment_nexus_url_resolver
+
+- name: resolve | nexus | Show nexus artifact information
+  debug:
+    var=nexus_artifact_info.json.data
+  tags: ["artifact-info"]

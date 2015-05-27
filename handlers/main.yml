@@ -1,27 +1,54 @@
 ---
-- name: "restartApp"
-  service: 
+
+- name: restart app
+  debug:
+    msg="Restart app"
+  changed_when: true
+  notify:
+     - restart app initd
+     - restart app supervisor
+
+- name: restart app initd
+  service:
     name="{{ deployment_artifact_name }}"
     state="restarted"
     enabled="yes"
-  notify: "wait for application to bootstrap"
-  when: deployment_install_initd
-
-- name: "wait for application to bootstrap"
-  pause: seconds={{ deployment_bootstrap_wait_sec }}
   changed_when: true
-  notify: "make http request to service"
+  notify: wait 4 port
+  when: deployment_install_daemon == "initd"
 
-- name: "make http request to service"
-  uri: url={{deployment_http_check_url}} return_content=yes HEADER_Accept="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+- name: restart app supervisor
+  supervisorctl:
+    name="{{ deployment_artifact_name }}"
+    state="restarted"
+  changed_when: true
+  notify: wait 4 port
+  when: deployment_install_daemon == "supervisor"
+
+- name: wait 4 port
+  wait_for:
+    port="{{ deployment_http_check_port }}"
+    host="{{ ansible_ssh_host | default(inventory_hostname) }}"
+    delay="{{ deployment_delay_sec }}"
+    timeout="{{ deployment_timeout_wait_sec }}"
+  changed_when: true
+  notify: HTTP request
+
+- name: HTTP request
+  uri:
+    url="{{ deployment_http_check_url }}"
+    return_content="yes"
+    HEADER_Accept="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+  changed_when: true
+  notify: check payload
   register: webpage
-  tags: ["verify-working"]
-  notify: "fail if http request does not contain expected content"
   when: deployment_http_check_url_suffix is defined
+  tags: ["verify-working"]
 
-- name: "fail if http request does not contain expected content"
-  fail: msg=" {{deployment_artifact_name}} is not happy, {{deployment_http_check_url}} does not return expected content [{{deployment_http_check_expected_content}}]"
-  when: "'{{deployment_http_check_expected_content}}' not in webpage.content"
+- name: check payload
+  fail:
+    msg=" {{deployment_artifact_name}} is not happy, {{deployment_http_check_url}} does not return expected content [{{deployment_http_check_expected_content}}]"
+  when: deployment_http_check_expected_content not in webpage.content
   tags: ["verify-working"]
 
 

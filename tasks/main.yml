@@ -1,18 +1,29 @@
 ---
 
-- include: directories.yml
-  tags: ["deploy-directories"]
+- name: main | Check if first boot file exists
+  stat:
+    path="{{ deployment_guard_file }}"
+  register: reg_guard_file
 
-- include: init-script.yml
-  when: deployment_install_initd
-  tags: ["deploy-initd"]
+- include: resolver/main.yml
+  when: not reg_guard_file.stat.exists or deployment_force
 
-- include: get-artifact.yml
-  tags: ["deploy-artifact"]
+- include: download.yml
+  when: not reg_guard_file.stat.exists or deployment_force
+  tags: ["download"]
 
-- include: unpack.yml
-  tags: ["deploy-unpack"]
+- include: daemon/main.yml
+  when: not reg_guard_file.stat.exists or deployment_force
+  tags: ["initd"]
 
+- include: directory-structure.yml
+  when: not reg_guard_file.stat.exists or deployment_force
+  tags: ["directory", "directory-structure"]
+
+- name: main | Touch file guard
+  copy:
+    content=""
+    dest="{{ deployment_guard_file }}"
 
 
 

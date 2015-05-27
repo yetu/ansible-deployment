@@ -1,0 +1,36 @@
+--- 
+
+- name: directory structure | Change file owner for all files
+  file:
+    path="{{ deployment_artifact_version_dir }}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+    state="directory"
+    recurse="yes"
+
+- name: directory structure | Change file owner for all files
+  file: 
+    path="{{ deployment_artifact_version_dir }}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+    state="directory"
+    recurse="yes"
+
+- name: directory structure | Create latest symlink
+  file: 
+    src="{{ deployment_artifact_version_dir }}"
+    dest="{{ deployment_current_dir }}"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+    mode="0755"
+    state="link"
+  notify:
+   - restart app
+
+- name: directory structure | Create deployment date file
+  copy:
+    content=""
+    dest="{{ deployment_current_dir }}/{{ current_date.stdout }}.deployment.date"
+    owner="{{ deployment_user }}"
+    group="{{ deployment_group }}"
+  when: download_artifact.changed
