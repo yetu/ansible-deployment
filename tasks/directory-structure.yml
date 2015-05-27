@@ -34,12 +34,3 @@
     owner="{{ deployment_user }}"
     group="{{ deployment_group }}"
   when: download_artifact.changed
-
-##TODO: Not sure why we have this ASK JOE
-#- name: directory structure | check http service for non-service content (e.g. static files)
-#  debug:
-#    msg="placeholder task to notify http request check"
-#  when: not deployment_install_initd
-#  changed_when: true
-#  notify:
-#    - HTTP request
