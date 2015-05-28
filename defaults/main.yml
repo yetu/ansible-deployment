@@ -52,3 +52,5 @@ deployment_exec_cmd                     : "{{ deployment_current_dir }}/bin/{{ d
 deployment_exec_arg                     : ""
 # Used for getting PID ID, it should be a unique value
 deployment_grep_name                    : "{{ deployment_exec_cmd }}"
+
+deployment_timeout_start_sec            : 5
