@@ -8,7 +8,9 @@ Currently: Artifact to deploy must be stored on a nexus server.
 
 ### TODO:
 
-- Make artifact source configurable so it can be local zip file or artifact stored on nexus or other server.
+* README is out of date; adapt to new code
+* dependency: httplib is required
+* clarify one-app-per-server-assumption
 
 ### Usage guide
 
