@@ -40,12 +40,12 @@
     return_content="yes"
     HEADER_Accept="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
   changed_when: true
-  notify: check payload
+  notify: fail on incorrect payload
   register: webpage
   when: deployment_http_check_url_suffix is defined
   tags: ["verify-working"]
 
-- name: check payload
+- name: fail on incorrect payload
   fail:
     msg=" {{deployment_artifact_name}} is not happy, {{deployment_http_check_url}} does not return expected content [{{deployment_http_check_expected_content}}]"
   when: deployment_http_check_expected_content not in webpage.content
