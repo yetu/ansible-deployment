@@ -54,3 +54,11 @@ deployment_exec_arg                     : ""
 deployment_grep_name                    : "{{ deployment_exec_cmd }}"
 
 deployment_timeout_start_sec            : 5
+
+# notification
+deployment_notification_enabled         : false
+deployment_notification_slack_enabled   : false
+#deployment_notification_slack_token     : "sometoken"
+#deployment_notification_slack_domain     : "domain"
+deployment_status                        : "Failed"
+

@@ -24,8 +24,3 @@
   copy:
     content=""
     dest="{{ deployment_guard_file }}"
-
-
-
-
-
