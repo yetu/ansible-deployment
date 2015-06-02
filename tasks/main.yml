@@ -1,4 +1,10 @@
 ---
+# handlers:
+#   - name: main | include check_http handlers
+#     include: ../handlers/http_checks.yml
+
+#   - name: main | include notification handlers
+#     include: ../handlers/notification.yml
 
 - name: main | Check if first boot file exists
   stat:
@@ -24,8 +30,3 @@
   copy:
     content=""
     dest="{{ deployment_guard_file }}"
-
-
-
-
-

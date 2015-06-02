@@ -8,6 +8,7 @@
 - name: download | set new version directory
   set_fact:
     deployment_artifact_version_dir : "{{ deployment_work_dir }}/{{ nexus_artifact_info.json.data.version }}"
+    deployment_artifact_version_hash : "{{ nexus_artifact_info.json.data.version }}"
 
 - name: download | Create application base directories
   file: 
